@@ -21,14 +21,14 @@ namespace Group2_MachineProblem
     
         public string Username
         {
-            // Define getters and setters for username
+            // Define getter and setters for username
             get { return username;  }
             set { username = value; }
         }
 
         public string Pin 
         {
-            // Define getters and setters for pin
+            // Define getter and setters for pin
             get { return pin; }
             set { pin = value; }
         }

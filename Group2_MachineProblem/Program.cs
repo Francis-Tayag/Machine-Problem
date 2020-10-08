@@ -28,7 +28,7 @@ namespace Group2_MachineProblem
 
         public string Pin 
         {
-            // Define getter and setters for pingdrfgfdgdfgdfdf
+            // Define getter and setters for pin
             get { return pin; }
             set { pin = value; }
         }

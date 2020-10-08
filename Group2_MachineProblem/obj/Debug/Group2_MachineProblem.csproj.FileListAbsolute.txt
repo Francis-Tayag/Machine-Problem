@@ -1,0 +1,7 @@
+C:\Users\Francis\Desktop\Group2_MachineProblem\Group2_MachineProblem\bin\Debug\Group2_MachineProblem.exe.config
+C:\Users\Francis\Desktop\Group2_MachineProblem\Group2_MachineProblem\bin\Debug\Group2_MachineProblem.exe
+C:\Users\Francis\Desktop\Group2_MachineProblem\Group2_MachineProblem\bin\Debug\Group2_MachineProblem.pdb
+C:\Users\Francis\Desktop\Group2_MachineProblem\Group2_MachineProblem\obj\Debug\Group2_MachineProblem.csprojAssemblyReference.cache
+C:\Users\Francis\Desktop\Group2_MachineProblem\Group2_MachineProblem\obj\Debug\Group2_MachineProblem.csproj.CoreCompileInputs.cache
+C:\Users\Francis\Desktop\Group2_MachineProblem\Group2_MachineProblem\obj\Debug\Group2_MachineProblem.exe
+C:\Users\Francis\Desktop\Group2_MachineProblem\Group2_MachineProblem\obj\Debug\Group2_MachineProblem.pdb

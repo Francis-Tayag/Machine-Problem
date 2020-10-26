@@ -10,7 +10,15 @@ namespace Group2_MachineProblem
     {
         private string userName, pin;
 
-        public string UserName { get; set; }
-        public string Pin { get; set; }
+        public string UserName
+        {
+            get { return userName;  }
+            set { userName = value; }
+        }
+        public string Pin
+        {
+            get { return pin; }
+            set { pin = value; }
+        }
     }
 }

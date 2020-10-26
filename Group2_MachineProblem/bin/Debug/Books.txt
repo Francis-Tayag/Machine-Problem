@@ -1,0 +1,4 @@
+Oliver Twist;1934;1st;Adventure;Charles Dickens;
+A Tale of Two Cities;1859;1st;Historical Fiction;Charles Dickens;
+She: A History of Adventure;1887;Special;Adventure;Rider Haggard;
+The Haunted Man;1848;1st;Adventure;Charles Dickens| Tolkien;

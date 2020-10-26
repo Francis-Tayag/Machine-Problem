@@ -8,13 +8,19 @@ using System.Windows.Forms;
 
 namespace Group2_MachineProblem
 {
-    partial class SignInForm
+    class SignInForm : Form
     {
         private Label lblHeader, lblUName, lblPin;
         private TextBox txtUName, txtPin;
         private Button btnBack;
+        Library library = new Library();
 
-        private void InitializeComponent()
+        public SignInForm()
+        {
+            LoadControls();
+        }
+
+        private void LoadControls()
         {
             // lblHeader
             lblHeader = new Label();
@@ -52,7 +58,9 @@ namespace Group2_MachineProblem
             txtPin.Name = "txtPin";
             txtPin.Size = new Size(100, 50);
             txtPin.Location = new Point(100, 75);
+            txtPin.MaxLength = 4;
             txtPin.KeyUp += new KeyEventHandler(txtPin_KeyUp);
+            txtPin.KeyPress += new KeyPressEventHandler(txtPin_KeyPress);
             this.Controls.Add(txtPin);
 
             // btnBack
@@ -71,22 +79,47 @@ namespace Group2_MachineProblem
             this.MinimumSize = new Size(250, 250);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         }
+        private void txtPin_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !Char.IsControl(e.KeyChar))
+            {
+                MessageBox.Show("Numbers only!", "Error");
+                e.Handled = true;
+            }
+        }
+
         private void txtPin_KeyUp(object sender, KeyEventArgs e)
         {
             // TODO
             // TESTING
-            if(txtUName.Text == "test" && txtPin.Text == "1234") {
-                this.Hide();
-                var f = new ReaderMenuForm(txtUName.Text);
-                f.Closed += (s, args) => this.Close();
-                f.Show();
-            }
-            else if(txtUName.Text == "admin" && txtPin.Text == "1234")
+            bool userFound = false;
+            if(txtPin.Text.Length == 4)
             {
-                this.Hide();
-                var f = new LibrarianMenuForm();
-                f.Closed += (s, args) => this.Close();
-                f.Show();
+                if (txtUName.Text == "admin" && txtPin.Text == "1234")
+                {
+                    userFound = true;
+                    this.Hide();
+                    var f = new LibrarianMenuForm();
+                    f.Closed += (s, args) => this.Close();
+                    f.Show();
+                }
+                foreach (LibraryReader user in library.UsersList)
+                {
+                    if (txtUName.Text == user.UserName && txtPin.Text == user.Pin)
+                    {
+                        userFound = true;
+                        this.Hide();
+                        var f = new ReaderMenuForm(txtUName.Text);
+                        f.Closed += (s, args) => this.Close();
+                        f.Show();
+                        break;
+                    }
+                }
+                if (!userFound)
+                {
+                    MessageBox.Show("Wrong pin or wrong username. Please check again.");
+                    txtPin.Text = "";
+                }
             }
         }
         private void btnBack_Click(object sender, EventArgs e)

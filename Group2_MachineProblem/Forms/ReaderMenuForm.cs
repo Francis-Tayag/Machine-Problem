@@ -1,18 +1,30 @@
-﻿using System;
+﻿// TODO
+// Return books function for the dialogbox
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Group2_MachineProblem
 {
-    partial class ReaderMenuForm
+    partial class ReaderMenuForm : Form
     {
         private Label lblHeader;
         private Button btnBrowse, btnBorrow, btnReturnBooks, btnSignOut;
-        private void InitializeComponent()
+
+        private string uname = "Unknown User";
+        public ReaderMenuForm(string uname)
+        {
+            this.uname = uname;
+            LoadControls();
+        }
+
+        private void LoadControls()
         {
             // lblHeader
             lblHeader = new Label();
@@ -68,17 +80,50 @@ namespace Group2_MachineProblem
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            // TODO
+            this.Hide();
+            var f = new BrowseBooksForm(this.uname);
+            f.Closed += (s, args) => this.Close();
+            f.Show();
         }
 
         private void btnBorrow_Click(object sender, EventArgs e)
         {
-            // TODO
+            this.Hide();
+            var f = new BorrowForm(this.uname);
+            f.Closed += (s, args) => this.Close();
+            f.Show();
         }
 
         private void btnReturnBooks_Click(object sender, EventArgs e)
         {
-            // TODO
+            Library library = new Library();
+            string name = "";
+            string book;
+            bool nameFound = false;
+            foreach(string line in library.Borrowings)
+            {
+                name = line.Split(';')[0];
+                book = line.Split(';')[1];
+
+                if (name == this.uname)
+                {
+                    string message = string.Format("You have currently borrowed: {0}\nReturn book?", book); // TODO
+                    string caption = "Return books";
+                    DialogResult dialogResult = MessageBox.Show(message, caption, MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        library.Borrowings.Remove(line);
+                        library.SaveBorrowings();
+                    }
+                    nameFound = true;
+                    break;
+                }
+            }
+            if(!nameFound)
+            {
+                MessageBox.Show("You have not borrowed any books");
+            }
+
         }
 
         private void btnSignOut_Click(object sender, EventArgs e)

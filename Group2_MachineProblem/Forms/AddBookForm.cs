@@ -5,14 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
+using System.Text.RegularExpressions;
+
 namespace Group2_MachineProblem
 {
-    partial class AddBookForm
+    class AddBookForm : Form
     {
-        private Label lblHeader, lblId, lblTitle, lblAuthor, lblDatePub, lblGenre, lblEdition;
-        private TextBox txtId, txtTitle, txtAuthor, txtDatePub, txtGenre, txtEdition;
+        private Label lblHeader, lblTitle, lblAuthor, lblDatePub, lblGenre, lblEdition;
+        private TextBox txtTitle, txtAuthor, txtDatePub, txtGenre, txtEdition;
         private Button btnAddBook, btnBack;
-        private void InitializeComponent()
+
+        public AddBookForm()
+        {
+            LoadControls();
+        }
+        private void LoadControls()
         {
             // lblHeader
             lblHeader = new Label();
@@ -21,14 +29,6 @@ namespace Group2_MachineProblem
             lblHeader.Size = new Size(70, 25);
             lblHeader.Location = new Point(10, 10);
             this.Controls.Add(lblHeader);
-
-            // lblId
-            lblId = new Label();
-            lblId.Name = "lblId";
-            lblId.Text = "ID: ";
-            lblId.Size = new Size(70, 25);
-            lblId.Location = new Point(10, 50);
-            this.Controls.Add(lblId);
 
             // lblTitle
             lblTitle = new Label();
@@ -70,18 +70,12 @@ namespace Group2_MachineProblem
             lblEdition.Location = new Point(10, 175);
             this.Controls.Add(lblEdition);
 
-            // txtId
-            txtId = new TextBox();
-            txtId.Name = "txtId";
-            txtId.Size = new Size(145, 50);
-            txtId.Location = new Point(80, 50);
-            this.Controls.Add(txtId);
-
             // txtTitle
             txtTitle = new TextBox();
             txtTitle.Name = "txtTitle";
             txtTitle.Size = new Size(145, 50);
             txtTitle.Location = new Point(80, 75);
+            txtTitle.KeyPress += new KeyPressEventHandler(txtBox_KeyPress);
             this.Controls.Add(txtTitle);
 
             // txtAuthor
@@ -89,6 +83,7 @@ namespace Group2_MachineProblem
             txtAuthor.Name = "txtAuthor";
             txtAuthor.Size = new Size(145, 50);
             txtAuthor.Location = new Point(80, 100);
+            txtAuthor.KeyPress += new KeyPressEventHandler(txtBox_KeyPress);
             this.Controls.Add(txtAuthor);
 
             // txtDatePub
@@ -96,6 +91,7 @@ namespace Group2_MachineProblem
             txtDatePub.Name = "txtDatePub";
             txtDatePub.Size = new Size(145, 50);
             txtDatePub.Location = new Point(80, 125);
+            txtDatePub.KeyPress += new KeyPressEventHandler(txtBox_KeyPress);
             this.Controls.Add(txtDatePub);
 
             // txtGenre
@@ -103,6 +99,7 @@ namespace Group2_MachineProblem
             txtGenre.Name = "txtGenre";
             txtGenre.Size = new Size(145, 50);
             txtGenre.Location = new Point(80, 150);
+            txtGenre.KeyPress += new KeyPressEventHandler(txtBox_KeyPress);
             this.Controls.Add(txtGenre);
 
             // txtEdition
@@ -110,6 +107,7 @@ namespace Group2_MachineProblem
             txtEdition.Name = "txtEdition";
             txtEdition.Size = new Size(145, 50);
             txtEdition.Location = new Point(80, 175);
+            txtEdition.KeyPress += new KeyPressEventHandler(txtBox_KeyPress);
             this.Controls.Add(txtEdition);
 
             // btnAddBook
@@ -138,9 +136,79 @@ namespace Group2_MachineProblem
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         }
 
+        private void txtBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar.ToString() == ";" || e.KeyChar.ToString() == "|")
+            {
+                e.Handled = true;
+            }
+        }
+
         private void btnAddBook_Click(object sender, EventArgs e)
         {
-            // TODO
+            Library library = new Library();
+            bool fieldsEmpty = true;
+            bool invalidFields = true;
+            bool bookFound = false;
+
+            // The following conditionals process the fields for invalid input
+            foreach (Book book in library.BooksList)
+            {
+                if (txtTitle.Text == book.Title)
+                {
+                    bookFound = true;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(txtTitle.Text) &&
+               !string.IsNullOrEmpty(txtDatePub.Text) &&
+               !string.IsNullOrEmpty(txtEdition.Text) &&
+               !string.IsNullOrEmpty(txtGenre.Text) &&
+               !string.IsNullOrEmpty(txtAuthor.Text))
+            {
+                fieldsEmpty = false;
+            }
+            if (Regex.IsMatch(txtTitle.Text, @"^[a-zA-Z0-9\s\,\:\.\-]+$") &&
+               Regex.IsMatch(txtDatePub.Text, @"^[a-zA-Z0-9\s\,\:\.\-]+$") &&
+               Regex.IsMatch(txtEdition.Text, @"^[a-zA-Z0-9\s\,\:\.\-]+$") &&
+               Regex.IsMatch(txtGenre.Text, @"^[a-zA-Z0-9\s\,\:\.\-]+$") &&
+               Regex.IsMatch(txtAuthor.Text, @"^[a-zA-Z0-9\s\,\:\.\-]+$"))
+            {
+                invalidFields = false;
+            }
+
+            // Decide whether or not to process the info or not.
+            // This depends whether or not invalid input was found.
+            if (!fieldsEmpty && !invalidFields && !bookFound)
+            {
+                string[] authors = txtAuthor.Text.Split(',');
+                try
+                {
+                    using (StreamWriter w = File.AppendText("Books.txt"))
+                    {
+                        w.WriteLine("{0};{1};{2};{3};{4};", txtTitle.Text, txtDatePub.Text, txtEdition.Text, txtGenre.Text, string.Join("|", authors));
+                        MessageBox.Show("Book added");
+                    }
+                }
+                catch (Exception error)
+                {
+                    Console.Write(error);
+                }
+            }
+            else if (bookFound)
+            {
+                MessageBox.Show("Input book is already in the library.");
+                txtTitle.Text = "";
+            }
+            else if (fieldsEmpty)
+            {
+                MessageBox.Show("One of the fields is empty.");
+            }
+            else if (invalidFields)
+            {
+                MessageBox.Show("You entered an invalid input. Please check the fields again.");
+            }
+
         }
 
         private void btnBack_Click(object sender, EventArgs e)

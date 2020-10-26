@@ -9,10 +9,10 @@ namespace Group2_MachineProblem
     class LibraryReader : LibraryUser
     {
         private string firstName, lastName;
-        private Book[] booksBorrowed;
+        private string booksBorrowed;
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public Book[] BooksBorrowed { get; set; }
+        public string BooksBorrowed { get; set; }
     }
 }

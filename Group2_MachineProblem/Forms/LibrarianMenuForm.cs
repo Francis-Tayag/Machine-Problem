@@ -9,11 +9,16 @@ using System.Windows.Forms;
 
 namespace Group2_MachineProblem
 {
-    partial class LibrarianMenuForm
+    class LibrarianMenuForm : Form
     {
         private Label lblHeader;
         private Button btnViewHistory, btnModifyBook, btnAddBook, btnViewUsers, btnSignOut;
-        private void InitializeComponent()
+
+        public LibrarianMenuForm()
+        {
+            LoadControls();
+        }
+        private void LoadControls()
         {
             // lblHeader
             lblHeader = new Label();
@@ -78,12 +83,18 @@ namespace Group2_MachineProblem
 
         private void btnViewHistory_Click(object sender, EventArgs e)
         {
-            // TODO
+            this.Hide();
+            var f = new BorrowHistoryForm();
+            f.Closed += (s, args) => this.Close();
+            f.Show();
         }
 
         private void btnModifyBook_Click(object sender, EventArgs e)
         {
-            // TODO
+            this.Hide();
+            var f = new ModifyBookForm();
+            f.Closed += (s, args) => this.Close();
+            f.Show();
         }
 
         private void btnAddBook_Click(object sender, EventArgs e)
@@ -96,7 +107,10 @@ namespace Group2_MachineProblem
 
         private void btnViewUsers_Click(object sender, EventArgs e)
         {
-            // TODO
+            this.Hide();
+            var f = new ViewUsersForm();
+            f.Closed += (s, args) => this.Close();
+            f.Show();
         }
 
         private void btnSignOut_Click(object sender, EventArgs e)

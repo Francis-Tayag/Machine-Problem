@@ -8,11 +8,16 @@ using System.Windows.Forms;
 
 namespace Group2_MachineProblem
 {
-    partial class GuestMenuForm
+    class GuestMenuForm : Form
     {
         private Label lblHeader;
         private Button btnBrowse, btnSignOut;
-        private void InitializeComponent()
+        public GuestMenuForm()
+        {
+            LoadControls();
+        }
+
+        private void LoadControls()
         {
             // lblHeader
             lblHeader = new Label();
@@ -50,7 +55,10 @@ namespace Group2_MachineProblem
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            // TODO
+            this.Hide();
+            var f = new BrowseBooksForm("guest");
+            f.Closed += (s, args) => this.Close();
+            f.Show();
         }
         private void btnSignOut_Click(object sender, EventArgs e)
         {

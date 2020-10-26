@@ -9,12 +9,17 @@ using System.Windows.Forms;
 
 namespace Group2_MachineProblem
 {
-    partial class WelcomeForm
+    class WelcomeForm : Form
     {
         private Label lblTitle;
         private Button btnSignIn, btnSignInGuest, btnRegister, btnCredits;
 
-        private void InitializeComponent()
+        public WelcomeForm()
+        {
+            LoadControls();
+        }
+
+        private void LoadControls()
         {
             // lblTitle
             lblTitle = new Label();
